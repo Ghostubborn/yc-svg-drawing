@@ -1,7 +1,12 @@
 SVG.on(document, 'DOMContentLoaded', function () {
   if (SVG.supported) {
+    // 画布大小
     var width = 1600;
     var height = 980;
+    // 数据
+    var data = window.ycData;
+
+    // painting time
     var info = {
       rect: {
         firstOrLast: { width: 200, height: 50, fill: '#800000' },
@@ -9,7 +14,6 @@ SVG.on(document, 'DOMContentLoaded', function () {
       }
     };
 
-    var data = window.ycData;
     var draw = SVG('handmade').size(width, height);
     var totalBox;
 
