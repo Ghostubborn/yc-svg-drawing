@@ -80,7 +80,53 @@ SVG.on(document, 'DOMContentLoaded', function () {
     }
 
     // correct position and size
-    draw.viewbox(totalBox.x - 50, totalBox.y, totalBox.width + 100, totalBox.height);
+    draw.viewbox(totalBox.x - 50, totalBox.y - 50, totalBox.width + 100, totalBox.height + 100);
+    var flag = {
+      zoomIn: true,
+      drag: false
+    }
+    draw.click(() => {
+      if (!flag.drag) {
+        var rate = 0.8;
+        if (!flag.zoomIn) {
+          rate = 1.25;
+        }
+        draw.viewbox(
+          draw.viewbox().x,
+          draw.viewbox().y,
+          draw.viewbox().width * rate,
+          draw.viewbox().height * rate
+        )
+      }
+      flag.down = false;
+      flag.drag = false;
+    });
+    draw.mousemove((moveEvent) => {
+      if (flag.down) {
+        flag.drag = true
+      }
+      if (flag.drag) {
+        draw.viewbox(
+          draw.viewbox().x - moveEvent.movementX,
+          draw.viewbox().y - moveEvent.movementY,
+          draw.viewbox().width,
+          draw.viewbox().height
+        )
+      }
+    });
+    draw.mousedown(() => {
+      flag.down = true;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === 16) {
+        flag.zoomIn = false;
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 16) {
+        flag.zoomIn = true;
+      }
+    });
 
     function drawLine (x, y, x2, y2) {
       return draw.line(x, y, x2, y2).stroke({ width: 1 });
